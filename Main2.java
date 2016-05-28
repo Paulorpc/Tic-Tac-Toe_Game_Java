@@ -4,7 +4,7 @@ import java.util.Scanner;
 import org.omg.CORBA.VersionSpecHelper;
 
 
-public class Main {
+public class Main2 {
 
 	public static void main(String[] args) {
 		
@@ -15,8 +15,8 @@ public class Main {
 		boolean continuarJogando = true;
 		boolean continuarMenu = true;
 		Scanner sc = new Scanner(System.in);
-		Player j1;
-		Player j2;		
+		Player2 j1;
+		Player2 j2;		
 		String player1 = null;
 		String player2 = null;
 		
@@ -54,8 +54,8 @@ public class Main {
 			
 		}
 		
-		j1 = new Player(1, player1);
-		j2 = new Player(2, player2);
+		j1 = new Player2(1, player1);
+		j2 = new Player2(2, player2);
 
 		while (continuarJogando) {			
 			
@@ -91,7 +91,7 @@ public class Main {
 
 
 
-	public static void iniciaPartida(Player j1, Player j2){
+	public static void iniciaPartida(Player2 j1, Player2 j2){
 		
 		boolean fimJogada = false;
 		Scanner sc = new Scanner(System.in);

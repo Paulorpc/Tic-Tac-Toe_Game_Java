@@ -3,7 +3,7 @@ package JogoDaVelha;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Player {
+public class Player2 {
 	
 	protected static ArrayList<Integer> vetPosicoesJogadas = new ArrayList<>();
 	private static ArrayList<Integer> vetPosicoesLivres = new ArrayList<>();
@@ -13,7 +13,7 @@ public class Player {
 	protected int vitorias;
 	
 	
-	public Player(int numPlayer, String player) {
+	public Player2(int numPlayer, String player) {
 		for(int i=0; i<=8; i++)
 			if (!vetPosicoesLivres.contains(i)) vetPosicoesLivres.add(i);
 			
@@ -159,8 +159,8 @@ public class Player {
 		else if	(posicao == "cruz")   {	pos.add(1); pos.add(3);	pos.add(5);	pos.add(7);	}
 		else if	(posicao == "centro") {	pos.add(4); }
 		
-		if 		(numPlayer == 0)	i=0;
-		else if (numPlayer == 1)	i=1;
+		if 		(numPlayer == 1)	i=0;
+		else if (numPlayer == 2)	i=1;
 		
 		while (i<vetPosicoesJogadas.size()) {
 			
@@ -404,8 +404,8 @@ public class Player {
 	
 	
 	protected void resetarPartida(){
-		Player.vetPosicoesJogadas.clear();
-		Player.vetPosicoesLivres.clear();
+		Player2.vetPosicoesJogadas.clear();
+		Player2.vetPosicoesLivres.clear();
 		
 		for(int i=0; i<=8; i++)
 			if (!vetPosicoesLivres.contains(i)) vetPosicoesLivres.add(i);
