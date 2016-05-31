@@ -18,7 +18,7 @@ public class Player2 {
 	protected String player;
 	
 	// simbolos do jogo para j1 e j2 respectivamente
-	protected String simbolo[] = {"X", "O"};
+	private String simbolo[] = {"X", "O"};
 	
 	// numero do jogador e oponente (j1 = 1; j2 = 2)
 	private int numPlayer;
@@ -91,11 +91,14 @@ public class Player2 {
 	
 	
 	/**
-	 * Inteligencia Artificial para computador
+	 * Inteligencia Artificial para computador que não segue apenas uma lógica padrão
+	 * ela verifica as melhores jogadas e melhores posições da jogada em determinada 
+	 * situação através do número de possibilidades de vitórias ("pesos") 
 	 * @return posição a ser jogada
 	 */
 	private int IA(){
 		
+		Jogadas jogada = new Jogadas();
 		ArrayList<Integer> pos = new ArrayList<>();
 		ArrayList<Integer> posCantos = new ArrayList<>();
 		ArrayList<Integer> posCruz = new ArrayList<>();
@@ -143,11 +146,40 @@ public class Player2 {
 
 			}
 		}
-				
+		
+		
+		// Verifica se jogador esta tentando alguma jogada estratégica
+		if (vetPosicoesJogadas.size() >= 3) { 
+			
+			ArrayList<Integer> melhoresPosicoesDaJogada1 = new ArrayList<>();
+			ArrayList<Integer> pesoPosicao1 = new ArrayList<>();
+			
+			// Receve melhor jogada possível
+			melhoresPosicoesDaJogada1 = melhoresPosicoesDasJogada(numOponente);
+			
+			
+			// verifica quais a possibilidade de vitorias para cada posição da jogada escolhida(da peso para as posibilidades)
+			for (int i=0; i< melhoresPosicoesDaJogada1.size(); i++)
+				pesoPosicao1.add( jogada.verificaMelhorPossibilidadeVitoria(numOponente, melhoresPosicoesDaJogada1.get(i)) );
+			
+			// Escolhe melhor posicao dde acordo com o peso
+			int auxPosicaoMaior2 = 0;
+			for (int n = 0; n < pesoPosicao1.size(); n++){
+				if(pesoPosicao1.get(n) > pesoPosicao1.get(auxPosicaoMaior2)) auxPosicaoMaior2 = n;
+			}
+			
+			return melhoresPosicoesDaJogada1.get( auxPosicaoMaior2 );
+			
+		}
+		
 		
 		// jogador 1, sai jogando sempre no centro
 		if (vetPosicoesJogadas.isEmpty())
-			return 4;
+			
+			return 4; 
+			// tudo indica que mesmo jogando aleatoriamente na primeira jogada a IA não iria perder
+			// mas não houve testes suficiente ainda.
+			//return jogaAleatoriamente();
 					
 		
 		// rodada 2 
@@ -166,11 +198,28 @@ public class Player2 {
 		}		
 		
 		//Rodada 3
-		if ( vetPosicoesJogadas.size() >= 2 )
+		if ( vetPosicoesJogadas.size() >= 2 ) {
 			
-			// verifica a melhor jogada possível
-			return jogaAleatoriamentePosicoesPredefinidas( melhoresPosicoesDasJogada(numPlayer) );
-		else 
+			ArrayList<Integer> melhoresPosicoesDaJogada = new ArrayList<>();
+			ArrayList<Integer> pesoPosicao = new ArrayList<>();
+			
+			// Receve melhor jogada possível
+			melhoresPosicoesDaJogada = melhoresPosicoesDasJogada(numPlayer);
+			
+			
+			// verifica quais a possibilidade de vitorias para cada posição da jogada escolhida(da peso para as posibilidades)
+			for (int i=0; i< melhoresPosicoesDaJogada.size(); i++)
+				pesoPosicao.add( jogada.verificaMelhorPossibilidadeVitoria(numPlayer, melhoresPosicoesDaJogada.get(i)) );
+			
+			// Escolhe melhor posicao dde acordo com o peso
+			int auxPosicaoMaior2 = 0;
+			for (int n = 0; n < pesoPosicao.size(); n++){
+				if(pesoPosicao.get(n) > pesoPosicao.get(auxPosicaoMaior2)) auxPosicaoMaior2 = n;
+			}
+			
+			return melhoresPosicoesDaJogada.get( auxPosicaoMaior2 );
+			
+		} else 
 			// se não tiver joga em uma posição livre
 			return jogaAleatoriamentePosicoesPredefinidas(vetPosicoesLivres);
 
@@ -215,7 +264,7 @@ public class Player2 {
 	 * @param numPlayer Player 1 = 1; Player 2 = 2.
 	 * @return o simbolo do jogador
 	 */
-	public String verificaSimbolo(int numPlayer){
+	private String verificaSimbolo(int numPlayer){
 		String simb = null;
 		
 		if 		(numPlayer == 1) 	simb = simbolo[0];
@@ -291,11 +340,11 @@ public class Player2 {
 			if (jogadas.get(j) == null)
 				jogadas.remove(j);
 		
-		// verificar qual das possibilidades é a melhor
+		// verificar qual das possibilidades é a melhor através dos "pesos"
 		for (int i=0; i< jogadas.size(); i++)
 			melhorJogada.add( jogada.verificaMelhorPossibilidadeVitoria(numPlayer, jogadas.get(i)) );
 		
-		
+		// verifica qual dos tipos de jogadas tem mais possibilidades de vitoria (maior peso)
 		int auxPosicaoMaior = 0;
 		for (int n = 0; n < melhorJogada.size(); n++){
 			if(melhorJogada.get(n) > melhorJogada.get(auxPosicaoMaior)) auxPosicaoMaior = n;
@@ -387,7 +436,7 @@ public class Player2 {
 	 * Cria a matriz do tabuleiro com as posições dos jogadores (X e O)
 	 * @return a matriz
 	 */
-	public static String[][] carregaMatriz(){
+	private static String[][] carregaMatriz(){
 		
 		String simbolo;
 		String matriz[][] = new String[3][3];

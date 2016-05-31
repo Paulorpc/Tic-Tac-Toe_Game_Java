@@ -13,6 +13,8 @@ public class Jogadas {
 	private ArrayList<Integer> pos7 = new ArrayList<>();
 	private ArrayList<Integer> pos8 = new ArrayList<>();
 	
+	
+	
 	/**
 	 * Jogadas em Delta pelos cantos
 	 * 
@@ -26,8 +28,6 @@ public class Jogadas {
 	public ArrayList<Integer> DeltaCantosLargo(int numPlayer){
 		
 		ArrayList<ArrayList<Integer>> pos  = new ArrayList<>();
-		ArrayList<ArrayList<Integer>> possibilidadeDeJogada = new ArrayList<>();
-		ArrayList<Integer> melhorPossibilidade = new ArrayList<>();
 		
 		clearPos();
 		
@@ -38,29 +38,7 @@ public class Jogadas {
 		
 		pos.add(pos1); pos.add(pos2); pos.add(pos3); pos.add(pos4);
 		
-		// Vverifica quais são possiveis jogadas
-		for (int i=0; i< pos.size(); i++)
-			possibilidadeDeJogada.add( verificaPosicoesJogada(numPlayer, pos.get(i)) );
-		
-		// Se voltou -1 então a jogada não serve, remove do vetor.
-		for (int j=possibilidadeDeJogada.size()-1; j >= 0; j--)
-			if (possibilidadeDeJogada.get(j).contains(-1))
-				possibilidadeDeJogada.remove(j);
-		
-		// verificar qual das possibilidades é a melhor
-		for (int i=0; i< possibilidadeDeJogada.size(); i++)
-			melhorPossibilidade.add( verificaMelhorPossibilidadeVitoria(numPlayer, possibilidadeDeJogada.get(i)) );
-		
-		// coloca a possibilidade com mais chances de vitória em auxPosicaoMaior para retorno.
-		int auxPosicaoMaior = 0;
-		for (int n = 0; n < melhorPossibilidade.size(); n++){
-			if(melhorPossibilidade.get(n) > melhorPossibilidade.get(auxPosicaoMaior)) auxPosicaoMaior = n;
-		}
-
-		if (possibilidadeDeJogada.isEmpty())
-			return null;
-		else
-			return possibilidadeDeJogada.get( auxPosicaoMaior );
+		return escolheMelhorJogada(numPlayer, pos);
 			
 	}
 	
@@ -78,8 +56,6 @@ public class Jogadas {
 	public ArrayList<Integer> DeltaCantosCurto(int numPlayer){
 		
 		ArrayList<ArrayList<Integer>> pos  = new ArrayList<>();
-		ArrayList<ArrayList<Integer>> possibilidadeDeJogada = new ArrayList<>();
-		ArrayList<Integer> melhorPossibilidade = new ArrayList<>();
 		
 		clearPos();
 				
@@ -90,28 +66,7 @@ public class Jogadas {
 		
 		pos.add(pos1); pos.add(pos2); pos.add(pos3); pos.add(pos4);
 		
-		for (int i=0; i< pos.size(); i++)
-			possibilidadeDeJogada.add( verificaPosicoesJogada(numPlayer, pos.get(i)) );
-		
-		
-		for (int j=possibilidadeDeJogada.size()-1; j >= 0; j--)
-			if (possibilidadeDeJogada.get(j).contains(-1))
-				possibilidadeDeJogada.remove(j);
-		
-		
-		for (int i=0; i< possibilidadeDeJogada.size(); i++)
-			melhorPossibilidade.add( verificaMelhorPossibilidadeVitoria(numPlayer, possibilidadeDeJogada.get(i)) );
-		
-		
-		int auxPosicaoMaior = 0;
-		for (int n = 0; n < melhorPossibilidade.size(); n++){
-			if(melhorPossibilidade.get(n) > melhorPossibilidade.get(auxPosicaoMaior)) auxPosicaoMaior = n;
-		}
-		
-		if (possibilidadeDeJogada.isEmpty())
-			return null;
-		else
-			return possibilidadeDeJogada.get( auxPosicaoMaior );
+		return escolheMelhorJogada(numPlayer, pos);
 
 	}
 	
@@ -129,8 +84,6 @@ public class Jogadas {
 	public ArrayList<Integer> DeltaCentral(int numPlayer){
 		
 		ArrayList<ArrayList<Integer>> pos  = new ArrayList<>();
-		ArrayList<ArrayList<Integer>> possibilidadeDeJogada = new ArrayList<>();
-		ArrayList<Integer> melhorPossibilidade = new ArrayList<>();
 		
 		clearPos();
 		
@@ -141,30 +94,8 @@ public class Jogadas {
 	
 		pos.add(pos1); pos.add(pos2); pos.add(pos3); pos.add(pos4);
 		
-		for (int i=0; i< pos.size(); i++)
-			possibilidadeDeJogada.add( verificaPosicoesJogada(numPlayer, pos.get(i)) );
+		return escolheMelhorJogada(numPlayer, pos);
 		
-		
-		for (int j=possibilidadeDeJogada.size()-1; j >= 0; j--)
-			if (possibilidadeDeJogada.get(j).contains(-1))
-				possibilidadeDeJogada.remove(j);
-		 
-		
-		for (int i=0; i< possibilidadeDeJogada.size(); i++)
-			melhorPossibilidade.add( verificaMelhorPossibilidadeVitoria(numPlayer, possibilidadeDeJogada.get(i)) );
-		
-		
-		int auxPosicaoMaior = 0;
-		for (int n = 0; n < melhorPossibilidade.size(); n++){
-			if(melhorPossibilidade.get(n) > melhorPossibilidade.get(auxPosicaoMaior)) auxPosicaoMaior = n;
-		}
-		
-		
-		if (possibilidadeDeJogada.isEmpty())
-			return null;
-		else
-			return possibilidadeDeJogada.get( auxPosicaoMaior );
-	
 	}
 	
 	
@@ -181,8 +112,6 @@ public class Jogadas {
 	public ArrayList<Integer> L(int numPlayer){
 		
 		ArrayList<ArrayList<Integer>> pos  = new ArrayList<>();
-		ArrayList<ArrayList<Integer>> possibilidadeDeJogada = new ArrayList<>();
-		ArrayList<Integer> melhorPossibilidade = new ArrayList<>();
 		
 		clearPos();
 		
@@ -198,31 +127,49 @@ public class Jogadas {
 		pos.add(pos1); pos.add(pos2); pos.add(pos3); pos.add(pos4);
 		pos.add(pos5); pos.add(pos6); pos.add(pos7); pos.add(pos8);
 		
+		return escolheMelhorJogada(numPlayer, pos);
+		
+	}
+	
+	
+	/**
+	 * Recebe todas as possiveis jogadas de determinado tipo de jogada (estratégia), verifica qual delas 
+	 * tem maior chance de vitorias e retorna as posições da jogada escolhida.
+	 * @param numPlayer Player 1 = 1; Player 2 = 2.
+	 * @param pos Array com as posições da jogada
+	 * @return
+	 */
+	private ArrayList<Integer> escolheMelhorJogada(int numPlayer, ArrayList<ArrayList<Integer>> pos) {
+		
+		ArrayList<ArrayList<Integer>> possibilidadeDeJogada = new ArrayList<>();
+		ArrayList<Integer> melhorPossibilidade = new ArrayList<>();
+		
+		// Verifica quais são possiveis jogadas
 		for (int i=0; i< pos.size(); i++)
 			possibilidadeDeJogada.add( verificaPosicoesJogada(numPlayer, pos.get(i)) );
 		
-
+		// Se voltou -1 então a jogada não serve, remove do vetor.
 		for (int j=possibilidadeDeJogada.size()-1; j >= 0; j--)
 			if (possibilidadeDeJogada.get(j).contains(-1))
 				possibilidadeDeJogada.remove(j);
-		 
-
+		
+		// verificar qual das possibilidades é a melhor
 		for (int i=0; i< possibilidadeDeJogada.size(); i++)
 			melhorPossibilidade.add( verificaMelhorPossibilidadeVitoria(numPlayer, possibilidadeDeJogada.get(i)) );
 		
 		
+		// coloca a possibilidade com mais chances de vitória em auxPosicaoMaior para retorno.
 		int auxPosicaoMaior = 0;
 		for (int n = 0; n < melhorPossibilidade.size(); n++){
 			if(melhorPossibilidade.get(n) > melhorPossibilidade.get(auxPosicaoMaior)) auxPosicaoMaior = n;
 		}
-		
+
 		if (possibilidadeDeJogada.isEmpty())
 			return null;
-		else 
+		else
 			return possibilidadeDeJogada.get( auxPosicaoMaior );
 		
 	}
-	
 	
 	
 	/**
@@ -231,7 +178,7 @@ public class Jogadas {
 	 * @param pos O array de posições que deseja verificar
 	 * @return Retorna um Array de Inteiros que indica a posição que deve ser jogada
 	 */
-	public ArrayList<Integer> verificaPosicoesJogada(int numPlayer, ArrayList<Integer> pos){
+	private ArrayList<Integer> verificaPosicoesJogada(int numPlayer, ArrayList<Integer> pos){
 			
 		Integer i = null;
 		ArrayList<Integer> posEncontradas = new ArrayList<>();
@@ -276,13 +223,14 @@ public class Jogadas {
 	}
 	
 	
+	
 	/**
 	 * Simula a jogada futura para saber qual possui maior chances de vitória
 	 * @param numPlayer Player 1 = 1; Player 2 = 2. 
 	 * @param pos Vetor com as posições da jogada
 	 * @return Retorna o número de possíveis chances da jogada
 	 */
-	public Integer verificaMelhorPossibilidadeVitoria(int numPlayer, ArrayList<Integer> pos){
+	protected Integer verificaMelhorPossibilidadeVitoria(int numPlayer, ArrayList<Integer> pos){
 				
 		ArrayList<Integer> vetJogadasAux = new ArrayList<>();
 		Integer i=null;
@@ -292,7 +240,7 @@ public class Jogadas {
 		if 		(numPlayer == 1)	i=0;
 		else if (numPlayer == 2)	i=1;
 
-		// Percorre as posiões do jogadas pelo jogador
+		// Percorre as posicões jogadas pelo jogador
 		while ( i < Player2.vetPosicoesJogadas.size() ) {
 			
 			vetJogadasAux.add(Player2.vetPosicoesJogadas.get(i));
@@ -337,6 +285,71 @@ public class Jogadas {
 		
 		return contador;
 	}
+	
+	
+	
+	
+	/**
+	 * Simula a jogada futura para saber qual possui maior chances de vitória
+	 * @param numPlayer Player 1 = 1; Player 2 = 2. 
+	 * @param pos posições da jogada
+	 * @return Retorna a melhor posicao da jogada
+	 */
+	protected Integer verificaMelhorPossibilidadeVitoria(int numPlayer, int pos){
+				
+		ArrayList<Integer> vetJogadasAux = new ArrayList<>();
+		Integer i=null;
+		
+		int contador = 0;
+		
+		if 		(numPlayer == 1)	i=0;
+		else if (numPlayer == 2)	i=1;
+
+		// Percorre as posicões jogadas pelo jogador
+		while ( i < Player2.vetPosicoesJogadas.size() ) {
+			
+			vetJogadasAux.add(Player2.vetPosicoesJogadas.get(i));
+					
+			i=i+2;	
+		}
+		
+		vetJogadasAux.add(pos);
+	
+		
+		// Verifica as possíveis posições de vitória e adiciona ao contador
+		//linhas
+		if(vetJogadasAux.contains(0) && vetJogadasAux.contains(1) && !Player2.vetPosicoesJogadas.contains(2)) contador++;
+		if(vetJogadasAux.contains(0) && vetJogadasAux.contains(2) && !Player2.vetPosicoesJogadas.contains(1)) contador++;
+		if(vetJogadasAux.contains(1) && vetJogadasAux.contains(2) && !Player2.vetPosicoesJogadas.contains(0)) contador++;
+		if(vetJogadasAux.contains(0+3) && vetJogadasAux.contains(1+3) && !Player2.vetPosicoesJogadas.contains(2+3)) contador++;
+		if(vetJogadasAux.contains(0+3) && vetJogadasAux.contains(2+3) && !Player2.vetPosicoesJogadas.contains(1+3)) contador++;
+		if(vetJogadasAux.contains(1+3) && vetJogadasAux.contains(2+3) && !Player2.vetPosicoesJogadas.contains(0+3)) contador++;
+		if(vetJogadasAux.contains(0+6) && vetJogadasAux.contains(1+6) && !Player2.vetPosicoesJogadas.contains(2+6)) contador++;
+		if(vetJogadasAux.contains(0+6) && vetJogadasAux.contains(2+6) && !Player2.vetPosicoesJogadas.contains(1+6)) contador++;
+		if(vetJogadasAux.contains(1+6) && vetJogadasAux.contains(2+6) && !Player2.vetPosicoesJogadas.contains(0+6)) contador++;
+		
+		//colunas
+		if(vetJogadasAux.contains(0) && vetJogadasAux.contains(3) && !Player2.vetPosicoesJogadas.contains(6)) contador++;
+		if(vetJogadasAux.contains(0) && vetJogadasAux.contains(6) && !Player2.vetPosicoesJogadas.contains(3)) contador++;
+		if(vetJogadasAux.contains(3) && vetJogadasAux.contains(6) && !Player2.vetPosicoesJogadas.contains(0)) contador++;
+		if(vetJogadasAux.contains(0+1) && vetJogadasAux.contains(3+1) && !Player2.vetPosicoesJogadas.contains(6+1)) contador++;
+		if(vetJogadasAux.contains(0+1) && vetJogadasAux.contains(6+1) && !Player2.vetPosicoesJogadas.contains(3+1)) contador++;
+		if(vetJogadasAux.contains(3+1) && vetJogadasAux.contains(6+1) && !Player2.vetPosicoesJogadas.contains(0+1)) contador++;
+		if(vetJogadasAux.contains(0+2) && vetJogadasAux.contains(3+2) && !Player2.vetPosicoesJogadas.contains(6+2)) contador++;
+		if(vetJogadasAux.contains(0+2) && vetJogadasAux.contains(6+2) && !Player2.vetPosicoesJogadas.contains(3+2)) contador++;
+		if(vetJogadasAux.contains(3+2) && vetJogadasAux.contains(6+2) && !Player2.vetPosicoesJogadas.contains(0+2)) contador++;
+		
+		//diagonais
+		if(vetJogadasAux.contains(0) && vetJogadasAux.contains(4) && !Player2.vetPosicoesJogadas.contains(8)) contador++;
+		if(vetJogadasAux.contains(0) && vetJogadasAux.contains(8) && !Player2.vetPosicoesJogadas.contains(4)) contador++;
+		if(vetJogadasAux.contains(4) && vetJogadasAux.contains(8) && !Player2.vetPosicoesJogadas.contains(0)) contador++;
+		if(vetJogadasAux.contains(2) && vetJogadasAux.contains(4) && !Player2.vetPosicoesJogadas.contains(6)) contador++;
+		if(vetJogadasAux.contains(2) && vetJogadasAux.contains(6) && !Player2.vetPosicoesJogadas.contains(4)) contador++;
+		if(vetJogadasAux.contains(4) && vetJogadasAux.contains(6) && !Player2.vetPosicoesJogadas.contains(2)) contador++;
+		
+		return contador;
+	}
+	
 	
 	
 	/**
